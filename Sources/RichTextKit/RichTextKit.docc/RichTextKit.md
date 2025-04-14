@@ -1,21 +1,17 @@
 # ``RichTextKit``
 
-RichTextKit is a Swift-based library that lets you work with rich text in UIKit, AppKit and SwiftUI.
+RichTextKit is a Swift SDK that helps you use rich text in Swift and SwiftUI.
 
 
 ## Overview
 
-![SwiftKit logo](Logo.png)
+![RichTextKit logo](Logo.png)
 
-RIchTextKit supports changing styles (bold, italic, underline), font, font sizes, colors, alignment etc. You can also drag and copy in images if you use a data format that allows it. 
+RichTextKit is a Swift SDK that helps you use rich text in Swift and SwiftUI.
 
-RichTextKit is supported by and released with permission from [Oribi](https://oribi.se/en/) and used in [OribiWriter](https://oribi.se/en/apps/oribi-writer/), which is out on iOS and soon on macOS.
+RichTextKit has a multi-platform SwiftUI ``RichTextEditor`` that can be added to any app. The editor supports text styles (bold, italic, underline, etc.), fonts, font sizes, colors, text alignments, image attachments, and much more.
 
-
-
-## Supported Platforms
-
-RichTextKit supports `iOS 14`, `macOS 12`, `tvOS 14` and `watchOS 8`.
+The ``RichTextEditor`` is powered by a multi-platform `RichTextView` that bridges `UITextView` and `NSTextView` and adds APIs to make them work more alike on all platforms.
 
 
 
@@ -27,55 +23,61 @@ RichTextKit can be installed with the Swift Package Manager:
 https://github.com/danielsaidi/RichTextKit.git
 ```
 
-or with CocoaPods:
-
-```
-pod RichTextKit
-```
 
 
+## Getting started
 
-## About this documentation
+@Links(visualStyle: detailedGrid) {
+    
+    - <doc:Getting-Started-Article>
+    - <doc:Demo-Article>
+}
 
-The online documentation is currently iOS only. To generate documentation for other platforms, open the package in Xcode, select a simulator then run `Product/Build Documentation`.
 
-Note that type extensions are not included in this documentation.
+
+## Repository
+
+For more information, source code, etc., visit the [project repository](https://github.com/danielsaidi/RichTextKit).
 
 
 
 ## License
 
-RichTextKit is available under the MIT license. See the [LICENSE][License] file for more info.
+RichTextKit is available under the MIT license.
 
 
 
 ## Topics
 
+### Getting Started
+
+- <doc:Getting-Started-Article>
 
 ### Articles
 
-- <doc:Getting-Started>
+- <doc:Demo-Article>
+- <doc:Context-Article>
+- <doc:Format-Article>
+- <doc:Views-Article>
 
-### Rich Text Views
+### Essentials
 
+- ``RichTextContext``
 - ``RichTextEditor``
-- ``RichTextView``
-- ``RichTextViewRepresentable``
+- ``RichTextViewer``
 
 ### Foundation
 
-- ``RichTextContext``
 - ``RichTextCoordinator``
 - ``RichTextPresenter``
 - ``RichTextReader``
 - ``RichTextWriter``
 
-### Alignment
+### Actions
 
-- ``RichTextAlignment``
-- ``RichTextAlignmentPicker``
-- ``RichTextAlignmentReader``
-- ``RichTextAlignmentWriter``
+- ``RichTextAction``
+- ``RichTextInsertable``
+- ``RichTextInsertion``
 
 ### Attributes
 
@@ -84,22 +86,36 @@ RichTextKit is available under the MIT license. See the [LICENSE][License] file 
 - ``RichTextAttributeReader``
 - ``RichTextAttributeWriter``
 
+### Bridging
+
+- ``RichTextView``
+- ``RichTextViewComponent``
+- ``RichTextViewRepresentable``
+
 ### Colors
 
 - ``ColorRepresentable``
-- ``RichTextColorReader``
-- ``RichTextColorWriter``
+- ``RichTextColor``
+
+### Commands
+
+- ``RichTextCommand``
 
 ### Data
 
 - ``RichTextDataError``
 - ``RichTextDataFormat``
 - ``RichTextDataReader``
-- ``RichTextDataWriter``
+
+### Editor
+
+- ``RichTextEditorConfig``
+- ``RichTextEditorStyle``
 
 ### Export
 
 - ``RichTextExportError``
+- ``RichTextExportMenu``
 - ``RichTextExportService``
 - ``RichTextExportUrlResolver``
 - ``StandardRichTextExportService``
@@ -110,17 +126,12 @@ RichTextKit is available under the MIT license. See the [LICENSE][License] file 
 - ``FontRepresentable``
 - ``FontDescriptorRepresentable``
 - ``FontTraitsRepresentable``
-- ``RichTextFontReader``
-- ``RichTextFontWriter``
+- ``RichTextFont``
 - ``StandardFontSizeProvider``
 
-### Font Pickers
+### Format
 
-- ``FontPicker``
-- ``FontPickerFont``
-- ``FontForEachPicker``
-- ``FontListPicker``
-- ``FontSizePicker``
+- ``RichTextFormat``
 
 ### Images
 
@@ -131,6 +142,21 @@ RichTextKit is available under the MIT license. See the [LICENSE][License] file 
 - ``RichTextImageConfiguration``
 - ``RichTextImageInsertConfiguration``
 
+### Keyboard
+
+- ``RichTextKeyboardToolbar``
+- ``RichTextKeyboardToolbarConfig``
+- ``RichTextKeyboardToolbarMenu``
+- ``RichTextKeyboardToolbarStyle``
+
+### Localization
+
+- ``RTKL10n``
+
+### Paragraph
+
+- ``NSMutableParagraphStyleValueLabel``
+
 ### Pasteboard
 
 - ``PasteboardImageReader``
@@ -138,12 +164,14 @@ RichTextKit is available under the MIT license. See the [LICENSE][License] file 
 ### Pdf
 
 - ``PdfDataError``
-- ``PdfDataWriter``
 - ``PdfPageConfiguration``
 - ``PdfPageMargins``
+- ``RichTextPdfDataReader``
 
 ### Sharing
 
+- ``RichTextNSSharingMenu``
+- ``RichTextShareMenu``
 - ``RichTextShareService``
 - ``StandardRichTextShareService``
 
@@ -151,6 +179,12 @@ RichTextKit is available under the MIT license. See the [LICENSE][License] file 
 
 - ``RichTextHighlightingStyle``
 - ``RichTextStyle``
-- ``RichTextStyleButton``
-- ``RichTextStyleReader``
-- ``RichTextStyleWriter``
+
+### Views
+
+- ``RichTextLabelValue``
+
+
+
+[License]: https://github.com/danielsaidi/RichTextKit/blob/master/LICENSE
+[Repository]: https://github.com/danielsaidi/RichTextKit

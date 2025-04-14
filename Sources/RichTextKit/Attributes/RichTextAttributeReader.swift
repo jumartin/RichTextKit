@@ -3,31 +3,30 @@
 //  RichTextKit
 //
 //  Created by Daniel Saidi on 2022-05-27.
-//  Copyright © 2022 Daniel Saidi. All rights reserved.
+//  Copyright © 2022-2024 Daniel Saidi. All rights reserved.
 //
 
 import Foundation
 
-/**
- This protocol can be implemented any types that can provide
- rich text attribute reading capabilities.
-
- The protocol is implemented by `NSAttributedString` as well
- as other library types.
- */
+/// This protocol extends the ``RichTextReader`` protocol to
+/// make any implementing type able to get attributes in the
+/// ``RichTextReader/richText`` property.
+///
+/// This protocol is implemented by `NSAttributedString` and
+/// other types in the library.
+///
+/// > Note: The protocol used to have a lot of functionality
+/// for getting various attributes, styles, etc. However, it
+/// caused duplicated code since the ``RichTextViewComponent``
+/// needed more capabilities as well. As such, this protocol
+/// is now limited in functionality.
 public protocol RichTextAttributeReader: RichTextReader {}
 
 extension NSAttributedString: RichTextAttributeReader {}
 
 public extension RichTextAttributeReader {
 
-    /**
-     Get a rich text attribute at the provided range.
-
-     - Parameters:
-       - attribute: The attribute to get.
-       - range: The range to get the attribute from.
-     */
+    /// Get a certain rich text attribute at a certain range.
     func richTextAttribute<Value>(
         _ attribute: RichTextAttribute,
         at range: NSRange
@@ -35,24 +34,12 @@ public extension RichTextAttributeReader {
         richTextAttributes(at: range)[attribute] as? Value
     }
 
-    /**
-     Get all rich text attributes at the provided range.
-
-     The function uses `safeRange(for:)` to handle incorrect
-     ranges, which is not handled by the native functions.
-
-     This function returns an empty attributes dictionary if
-     the rich text is empty, since this check will otherwise
-     cause the application to crash.
-
-     - Parameters:
-       - range: The range to get attributes from.
-     */
+    /// Get all rich text attributes at a certain range.
     func richTextAttributes(
         at range: NSRange
     ) -> RichTextAttributes {
         if richText.length == 0 { return [:] }
-        let range = safeRange(for: range)
+        let range = safeRange(for: range, isAttributeOperation: true)
         return richText.attributes(at: range.location, effectiveRange: nil)
     }
 }

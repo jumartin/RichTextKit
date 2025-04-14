@@ -3,26 +3,26 @@
 //  RichTextKit
 //
 //  Created by Daniel Saidi on 2022-06-05.
-//  Copyright © 2022 Daniel Saidi. All rights reserved.
+//  Copyright © 2022-2024 Daniel Saidi. All rights reserved.
 //
 
 import CoreGraphics
 import Foundation
 
-#if os(iOS) || os(tvOS)
+#if iOS || os(tvOS) || os(visionOS)
 import UIKit
 #endif
 
-#if os(macOS)
+#if macOS
 import AppKit
 #endif
 
 /**
- This protocol can be implemented any types that can provide
- additional image attachment capabilities.
+ This protocol extends ``RichTextReader`` with functionality
+ for handling image attachments.
 
- The protocol is implemented by `NSAttributedString` as well
- as other library types.
+ The protocol is implemented by `NSAttributedString` and can
+ be implemented by any `RichTextReader` as well.
  */
 public protocol RichTextImageAttachmentManager: RichTextReader {}
 
@@ -35,7 +35,8 @@ public extension RichTextImageAttachmentManager {
      */
     func attachmentBounds(
         for image: ImageRepresentable,
-        maxSize: CGSize) -> CGRect {
+        maxSize: CGSize
+    ) -> CGRect {
         let size = attachmentSize(for: image, maxSize: maxSize)
         return CGRect(origin: .zero, size: size)
     }
@@ -45,7 +46,8 @@ public extension RichTextImageAttachmentManager {
      */
     func attachmentSize(
         for image: ImageRepresentable,
-        maxSize: CGSize) -> CGSize {
+        maxSize: CGSize
+    ) -> CGSize {
         let size = image.size
         let validWidth = size.width < maxSize.width
         let validHeight = size.height < maxSize.height
@@ -61,7 +63,7 @@ public extension RichTextImageAttachmentManager {
     }
 }
 
-#if os(iOS) || os(macOS) || os(tvOS)
+#if iOS || macOS || os(tvOS) || os(visionOS)
 public extension RichTextImageAttachmentManager {
 
     /**
@@ -79,15 +81,6 @@ public extension RichTextImageAttachmentManager {
             if oldBounds == newBounds { return }
             attachment.bounds = newBounds
         }
-    }
-}
-
-private extension NSTextAttachment {
-
-    var attachedImage: ImageRepresentable? {
-        if let image = self.image { return image }
-        guard let imageData = self.contents else { return nil }
-        return ImageRepresentable(data: imageData)
     }
 }
 #endif

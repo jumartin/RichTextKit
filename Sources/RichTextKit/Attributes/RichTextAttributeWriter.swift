@@ -3,36 +3,30 @@
 //  RichTextKit
 //
 //  Created by Daniel Saidi on 2022-05-27.
-//  Copyright © 2022 Daniel Saidi. All rights reserved.
+//  Copyright © 2022-2024 Daniel Saidi. All rights reserved.
 //
 
 import Foundation
 
-/**
- This protocol can be implemented any types that can provide
- rich text attribute writing capabilities.
-
- This protocol is implemented by `NSMutableAttributedString`
- as well as other library types.
- */
-public protocol RichTextAttributeWriter: RichTextWriter {}
+/// This protocol extends the ``RichTextWriter`` protocol to
+/// make any implementing type able to set attributes in the
+/// ``RichTextReader/richText`` property.
+///
+/// This protocol is implemented by `NSAttributedString` and
+/// other types in the library.
+///
+/// > Note: The protocol used to have a lot of functionality
+/// for getting various attributes, styles, etc. However, it
+/// caused duplicated code since the ``RichTextViewComponent``
+/// needed more capabilities as well. As such, this protocol
+/// is now limited in functionality.
+public protocol RichTextAttributeWriter: RichTextWriter, RichTextAttributeReader {}
 
 extension NSMutableAttributedString: RichTextAttributeWriter {}
 
 public extension RichTextAttributeWriter {
 
-    /**
-     Set a certain rich text attribute to a certain value at
-     a certain range.
-
-     The function uses `safeRange(for:)` to handle incorrect
-     ranges, which is not handled by the native functions.
-
-     - Parameters:
-       - attribute: The attribute to set.
-       - newValue: The new value to set the attribute to.
-       - range: The range for which to set the attribute.
-     */
+    /// Set a certain rich text attribute at a certain range.
     func setRichTextAttribute(
         _ attribute: RichTextAttribute,
         to newValue: Any,
@@ -41,25 +35,17 @@ public extension RichTextAttributeWriter {
         setRichTextAttributes([attribute: newValue], at: range)
     }
 
-    /**
-     Set a set of rich text attributes at a certain range.
-
-     The function uses `safeRange(for:)` to handle incorrect
-     ranges, which is not handled by the native functions.
-
-     - Parameters:
-       - attributes: The attributes to set.
-       - range: The range for which to set the attributes.
-     */
+    /// Set certain rich text attributes at a certain range.
     func setRichTextAttributes(
         _ attributes: RichTextAttributes,
-        at range: NSRange
+        at range: NSRange? = nil
     ) {
-        let range = safeRange(for: range)
+        let rangeValue = range ?? richTextRange
+        let range = safeRange(for: rangeValue)
         guard let string = mutableRichText else { return }
         string.beginEditing()
         attributes.forEach { attribute, newValue in
-            string.enumerateAttribute(attribute, in: range, options: .init()) { value, range, _ in
+            string.enumerateAttribute(attribute, in: range, options: .init()) { _, range, _ in
                 string.removeAttribute(attribute, range: range)
                 string.addAttribute(attribute, value: newValue, range: range)
                 string.fixAttributes(in: range)

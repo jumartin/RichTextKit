@@ -3,25 +3,15 @@
 //  RichTextKit
 //
 //  Created by Daniel Saidi on 2022-06-02.
-//  Copyright © 2022 Daniel Saidi. All rights reserved.
+//  Copyright © 2022-2024 Daniel Saidi. All rights reserved.
 //
 
 import CoreGraphics
 
-/**
- This struct defines page margins for a PDF document.
- */
+/// This error can be thrown when creating PDF data.
 public struct PdfPageMargins: Equatable {
 
-    /**
-     Create PDF page margins.
-
-     - Parameters:
-       - top: The top margins.
-       - left: The left margins.
-       - bottom: The bottom margins.
-       - right: The right margins.
-     */
+    /// Create PDF page margins.
     public init(top: CGFloat, left: CGFloat, bottom: CGFloat, right: CGFloat) {
         self.top = top
         self.left = left
@@ -29,13 +19,7 @@ public struct PdfPageMargins: Equatable {
         self.right = right
     }
 
-    /**
-     Create PDF page margins.
-
-     - Parameters:
-       - horizontal: The horizontal margins.
-       - vertical: The vertical margins.
-     */
+    /// Create PDF page margins.
     public init(horizontal: CGFloat, vertical: CGFloat) {
         self.top = vertical
         self.left = horizontal
@@ -43,36 +27,23 @@ public struct PdfPageMargins: Equatable {
         self.right = horizontal
     }
 
-    /**
-     Create PDF page margins.
-
-     - Parameters:
-       - all: The margins for all edges.
-     */
+    /// Create PDF page margins.
     public init(all: CGFloat) {
         self.top = all
         self.left = all
         self.bottom = all
         self.right = all
     }
-    
-    /**
-     The top margins.
-     */
+
+    /// The top margins.
     public var top: CGFloat
 
-    /**
-     The left margins.
-     */
+    /// The left margins.
     public var left: CGFloat
 
-    /**
-     The bottom margins.
-     */
+    /// The bottom margins.
     public var bottom: CGFloat
 
-    /**
-     The right margins.
-     */
+    /// The right margins.
     public var right: CGFloat
 }

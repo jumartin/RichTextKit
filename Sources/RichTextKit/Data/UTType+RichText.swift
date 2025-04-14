@@ -3,16 +3,14 @@
 //  RichTextKit
 //
 //  Created by Daniel Saidi on 2022-06-02.
-//  Copyright © 2022 Daniel Saidi. All rights reserved.
+//  Copyright © 2022-2024 Daniel Saidi. All rights reserved.
 //
 
 import UniformTypeIdentifiers
 
 public extension UTType {
-    
-    /**
-     The uniform rich text types that RichTextKit supports.
-     */
+
+    /// Uniform rich text types that RichTextKit supports.
     static let richTextTypes: [UTType] = [
         .archivedData,
         .rtf,
@@ -20,18 +18,14 @@ public extension UTType {
         .plainText,
         .data
     ]
-    
-    /**
-     The uniform type for ``RichTextFormat/archivedData``.
-     */
+
+    /// The uniform type for ``RichTextDataFormat/archivedData``.
     static let archivedData = UTType(
         exportedAs: "com.richtextkit.archiveddata")
 }
 
 public extension Collection where Element == UTType {
-    
-    /**
-     The uniforum types an Oribi rich text document supports.
-     */
+
+    /// The uniforum types that rich text documents support.
     static var richTextTypes: [UTType] { UTType.richTextTypes }
 }

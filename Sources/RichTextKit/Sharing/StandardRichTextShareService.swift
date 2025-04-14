@@ -1,9 +1,9 @@
 //
 //  StandardRichTextShareService.swift
-//  OribiWriter
+//  RichTextKit
 //
 //  Created by Daniel Saidi on 2021-12-06.
-//  Copyright © 2021 Oribi. All rights reserved.
+//  Copyright © 2021-2024 Daniel Saidi. All rights reserved.
 //
 
 import Foundation
@@ -14,6 +14,7 @@ import Foundation
 
  Share files are by default written to the app caches folder.
  */
+@preconcurrency @MainActor
 public class StandardRichTextShareService: RichTextShareService {
 
     /**
@@ -33,14 +34,14 @@ public class StandardRichTextShareService: RichTextShareService {
 
     private let urlResolver: RichTextExportUrlResolver
     private let directory: FileManager.SearchPathDirectory
-    
+
     /**
      Generate a file with a certain name, content and format.
 
      Share files will by default be added to the app's cache
      folder, which means that we don't have to care about if
      a file with the same name already exists.
-     
+
      - Parameters:
        - fileName: The name of the shared file.
        - content: The rich text content to share.
@@ -49,30 +50,32 @@ public class StandardRichTextShareService: RichTextShareService {
     public func generateShareFile(
         withName fileName: String,
         content: NSAttributedString,
-        format: RichTextDataFormat) throws -> URL {
+        format: RichTextDataFormat
+    ) throws -> URL {
         let fileUrl = try urlResolver.fileUrl(
             withName: fileName,
             extension: format.standardFileExtension,
             in: directory)
-        let data = try content.richTextData(with: format)
+        let data = try content.richTextData(for: format)
         try data.write(to: fileUrl)
         return fileUrl
     }
-    
+
     /**
      Generate a PDF share file with a certain text content.
 
      Share files will by default be added to the app's cache
      folder, which means that we don't have to care about if
      a file with the same name already exists.
-     
+
      - Parameters:
        - fileName: The name of the shared file.
        - content: The rich text content to share.
      */
     public func generatePdfShareFile(
         withName fileName: String,
-        content: NSAttributedString) throws -> URL {
+        content: NSAttributedString
+    ) throws -> URL {
         let fileUrl = try urlResolver.fileUrl(
             withName: fileName,
             extension: "pdf",

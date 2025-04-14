@@ -3,22 +3,18 @@
 //  RichTextKit
 //
 //  Created by Daniel Saidi on 2022-05-22.
-//  Copyright © 2022 Daniel Saidi. All rights reserved.
+//  Copyright © 2022-2024 Daniel Saidi. All rights reserved.
 //
 
-#if canImport(AppKit)
+#if canImport(AppKit) && !targetEnvironment(macCatalyst)
 import AppKit
 
-/**
- This typealias bridges platform-specific font descriptors.
-
- The typealias also defines additional functionality as type
- extensions for the platform-specific types.
- */
+/// This typealias bridges platform-specific font descriptors.
 public typealias FontDescriptorRepresentable = NSFontDescriptor
 
 public extension FontDescriptorRepresentable {
 
+    /// Get a new font descriptor by toggling a text style.
     func byTogglingStyle(_ style: RichTextStyle) -> FontDescriptorRepresentable {
         guard let traits = style.symbolicTraits else { return self }
         if symbolicTraits.contains(traits) {
@@ -33,25 +29,19 @@ public extension FontDescriptorRepresentable {
 #if canImport(UIKit)
 import UIKit
 
-/**
- This typealias bridges platform-specific font descriptors.
-
- The typealias also defines additional functionality as type
- extensions for the platform-specific types.
- */
+/// This typealias bridges platform-specific font descriptors.
 public typealias FontDescriptorRepresentable = UIFontDescriptor
 
 public extension FontDescriptorRepresentable {
-/**
- Get a new font descriptor by toggling a certain text style.
- */
-func byTogglingStyle(_ style: RichTextStyle) -> FontDescriptorRepresentable {
-    guard let traits = style.symbolicTraits else { return self }
-    if symbolicTraits.contains(traits) {
-        return withSymbolicTraits(symbolicTraits.subtracting(traits)) ?? self
-    } else {
-        return withSymbolicTraits(symbolicTraits.union(traits)) ?? self
+
+    /// Get a new font descriptor by toggling a text style.
+    func byTogglingStyle(_ style: RichTextStyle) -> FontDescriptorRepresentable {
+        guard let traits = style.symbolicTraits else { return self }
+        if symbolicTraits.contains(traits) {
+            return withSymbolicTraits(symbolicTraits.subtracting(traits)) ?? self
+        } else {
+            return withSymbolicTraits(symbolicTraits.union(traits)) ?? self
+        }
     }
-}
 }
 #endif

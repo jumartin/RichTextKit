@@ -1,30 +1,28 @@
 <p align="center">
-    <img src ="Resources/Logo.png" alt="RichTextKit Logo" title="RichTextKit" width=600 />
+    <img src="Resources/Icon.png" alt="Project Icon" width="250" />
 </p>
 
 <p align="center">
     <img src="https://img.shields.io/github/v/release/danielsaidi/RichTextKit?color=%2300550&sort=semver" alt="Version" />
-    <img src="https://img.shields.io/badge/Swift-5.6-orange.svg" alt="Swift 5.6" />
+    <img src="https://img.shields.io/badge/Swift-5.9-orange.svg" alt="Swift 5.9" />
+    <img src="https://img.shields.io/badge/platform-SwiftUI-blue.svg" alt="Swift UI" title="Swift UI" />
+    <a href="https://danielsaidi.github.io/RichTextKit"><img src="https://img.shields.io/badge/documentation-web-blue.svg" alt="Documentation" /></a>
     <img src="https://img.shields.io/github/license/danielsaidi/RichTextKit" alt="MIT License" />
-    <a href="https://twitter.com/danielsaidi">
-        <img src="https://img.shields.io/badge/contact-@danielsaidi-blue.svg?style=flat" alt="Twitter: @danielsaidi" />
-    </a>
 </p>
 
 
-## About RichTextKit
 
-RichTextKit is a Swift-based library that lets you work with rich text in UIKit, AppKit, and SwiftUI.
+# RichTextKit
 
-RIchTextKit supports changing styles (bold, italic, underline), font, font sizes, colors, alignment, etc. You can also drag and copy in images if you use a data format that allows it. 
+RichTextKit is a Swift SDK that lets you edit rich text in `Swift` & `SwiftUI` with a multi-platform `RichTextEditor`:
 
-RichTextKit is supported by and released with permission from [Oribi](https://oribi.se/en/) and used in [OribiWriter](https://oribi.se/en/apps/oribi-writer/), which is out on iOS and soon on macOS.
+<p align="center">
+    <img src ="Resources/Demo.jpg" />
+</p>
 
+The `RichTextEditor` supports text styles (bold, italic, underline, etc.), fonts, font sizes, colors, text alignments, image attachments, and much more. It's powered by a `RichTextView` that bridges `UITextView` & `NSTextView` and adds additional, platform-agnostic APIs that make the two views behave more alike.
 
-
-## Supported Platforms
-
-RichTextKit supports `iOS 14`, `macOS 12`, `tvOS 14` and `watchOS 8`.
+If you just want to view rich text content, you can use the `RichTextViewer` SwiftUI view, which wraps the editor and applies a read-only configuration to it.
 
 
 
@@ -36,45 +34,86 @@ RichTextKit can be installed with the Swift Package Manager:
 https://github.com/danielsaidi/RichTextKit.git
 ```
 
-or with CocoaPods:
-
-```
-pod RichTextKit
-```
-
 
 
 ## Getting started
 
-The [online documentation][Documentation] has a [getting started][GettingStarted] guide to help you get started with RichTextKit.
+RichTextKit has a SwiftUI ``RichTextEditor`` that takes a text binding and a ``RichTextContext``:
+
+```swift
+struct MyView: View {
+
+    @State
+    private var text = NSAttributedString(string: "Type here...")
+    
+    @StateObject
+    var context = RichTextContext()
+
+    var body: some View {
+        RichTextEditor(text: $text, context: context) {
+            // You can customize the native text view here
+        }
+        .focusedValue(\.richTextContext, context)
+    }
+}
+```
+
+The editor uses a ``RichTextCoordinator`` to sync changes between the editor, context, and platform-specific view. You can use the context to change font, colors, alignment etc. and observe context changes to update the UI.
+
+If you just want to display rich text, you can use the ``RichTextViewer`` instead:
+
+```swift
+struct MyView: View {
+
+    private var text = NSAttributedString(...)
+
+    var body: some View {
+        RichTextViewer(text: text)
+    }
+}
+```
+
+RichTextKit provides UI components, keyboard shortcuts & menu commands that can be used in a rich text editor.
+
+For more information, please see the [getting started guide][Getting-Started].
 
 
 
 ## Documentation
 
-The [online documentation][Documentation] contains more information, code examples, etc., and makes it easy to overview the various parts of the library.
+The [online documentation][Documentation] has more information, articles, code examples, etc.
 
 
 
-## Demo Application
+## Demo App & Inspiration
 
-This project contains a demo app that lets you explore RichTextKit on iOS and macOS. To run it, just open and run `Demo/Demo.xcodeproj`.
+The RichTextKit demo lets you explore the library on iOS & macOS. To try it out, just open and run the `Demo` app.
+
+RichTextKit is also used in the following apps, so make sure to check them out for inspiration:
+
+<a title="Chunk" href="https://www.chunkapp.com"><img src="Resources/apps/chunk.png" width=100 /></a> 
+<a title="Oribi Writer" href="https://oribi.se/en"><img src="Resources/apps/oribiwriter.png" width=100 /></a>
+
+Don't hesitate to reach out if you are using RichTextKit, and want to add your app to this list. I'd love to feature it.
 
 
 
-## Support
+## Sponsor my work
 
-You can sponsor this project on [GitHub Sponsors][Sponsors] or get in touch for paid support. 
+Please consider supporting my work if you find this and my other [open-source projects][OpenSource] helpful. I manage them on my spare time, and any help to keep them going is greatly appreciated.
+
+You can [sponsor me][Sponsors] on GitHub Sponsors, [reach out][Email] for paid support, or hire me for [freelance work][Website].
 
 
 
 ## Contact
 
-Feel free to reach out if you have questions or if you want to contribute in any way:
+Feel free to reach out if you have questions or want to contribute in any way:
 
+* Website: [danielsaidi.com][Website]
 * E-mail: [daniel.saidi@gmail.com][Email]
-* Twitter: [@danielsaidi][Twitter]
-* Web site: [danielsaidi.com][Website]
+* Bluesky: [@danielsaidi@bsky.social][Bluesky]
+* Mastodon: [@danielsaidi@mastodon.social][Mastodon]
 
 
 
@@ -85,10 +124,15 @@ RichTextKit is available under the MIT license. See the [LICENSE][License] file 
 
 
 [Email]: mailto:daniel.saidi@gmail.com
-[Twitter]: http://www.twitter.com/danielsaidi
-[Website]: http://www.danielsaidi.com
+[Website]: https://danielsaidi.com
+[GitHub]: https://github.com/danielsaidi
+[OpenSource]: https://danielsaidi.com/opensource
 [Sponsors]: https://github.com/sponsors/danielsaidi
 
-[Documentation]: https://danielsaidi.github.io/RichTextKit/documentation/richtextkit/
-[GettingStarted]: https://danielsaidi.github.io/RichTextKit/documentation/richtextkit/getting-started
+[Bluesky]: https://bsky.app/profile/danielsaidi.bsky.social
+[Mastodon]: https://mastodon.social/@danielsaidi
+[Twitter]: https://twitter.com/danielsaidi
+
+[Documentation]: https://danielsaidi.github.io/RichTextKit/
+[Getting-Started]: https://danielsaidi.github.io/RichTextKit/documentation/richtextkit/getting-started
 [License]: https://github.com/danielsaidi/RichTextKit/blob/master/LICENSE

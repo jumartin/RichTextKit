@@ -3,74 +3,105 @@
 //  RichTextKit
 //
 //  Created by Daniel Saidi on 2022-05-28.
-//  Copyright © 2022 Daniel Saidi. All rights reserved.
+//  Copyright © 2022-2024 Daniel Saidi. All rights reserved.
 //
 
 import SwiftUI
 
-/**
- This extension defines rich text-specific images.
- */
 public extension Image {
+
+    static let richTextCopy = symbol("doc.on.clipboard")
+    static let richTextDelete = symbol("trash")
+    static let richTextDismissKeyboard = symbol("keyboard.chevron.compact.down")
+    static let richTextEdit = symbol("square.and.pencil")
+    static let richTextExport = symbol("square.and.arrow.up.on.square")
+    static let richTextPrint = symbol("printer")
+    static let richTextRedo = symbol("arrow.uturn.forward")
+    static let richTextReplace = symbol("arrow.turn.left.down")
+    static let richTextShare = symbol("square.and.arrow.up")
+    static let richTextUndo = symbol("arrow.uturn.backward")
 
     static let richTextAlignmentCenter = symbol("text.aligncenter")
     static let richTextAlignmentJustified = symbol("text.justify")
     static let richTextAlignmentLeft = symbol("text.alignleft")
     static let richTextAlignmentRight = symbol("text.alignright")
+    
+    static let richTextColorBackground = symbol("highlighter")
+    static let richTextColorForeground = symbol("character")
+    static let richTextColorReset = symbol("circle.slash")
+    static let richTextColorStroke = symbol("a.square")
+    static let richTextColorStrikethrough = symbol("strikethrough")
+    static let richTextColorUnderline = symbol("underline")
+    static let richTextColorUndefined = symbol("questionmark.app")
+
+    static let richTextDocument = symbol("doc.text")
+    static let richTextDocuments = symbol("doc.on.doc")
+
+    static let richTextFont = symbol("textformat")
+    static let richTextFontSizeDecrease = symbol("minus")
+    static let richTextFontSizeIncrease = symbol("plus")
+
+    static let richTextFormat = symbol("textformat")
+    static let richTextFormatBrush = symbol("paintbrush")
+
+    static let richTextIndentDecrease = symbol("decrease.indent")
+    static let richTextIndentIncrease = symbol("increase.indent")
+
+    static let richTextLineSpacing = symbol("arrow.up.and.down.text.horizontal")
+    static let richTextLineSpacingDecrease = symbol("minus")
+    static let richTextLineSpacingIncrease = symbol("plus")
+
+    static let richTextSelection = symbol("123.rectangle.fill")
 
     static let richTextStyleBold = symbol("bold")
     static let richTextStyleItalic = symbol("italic")
+    static let richTextStyleStrikethrough = symbol("strikethrough")
     static let richTextStyleUnderline = symbol("underline")
 
-    static let richTextActionCopy = symbol("doc.on.clipboard")
-    static let richTextActionEdit = symbol("square.and.pencil")
-    static let richTextActionRedo = symbol("arrow.uturn.forward")
-    static let richTextActionUndo = symbol("arrow.uturn.backward")
+    static let richTextSuperscriptDecrease = symbol("textformat.subscript")
+    static let richTextSuperscriptIncrease = symbol("textformat.superscript")
+    
+    static let richTextUnknownValueType = symbol("questionmark")
 }
 
-private extension Image {
+public extension Image {
+
+    static func richTextStepFontSize(
+        _ points: Int
+    ) -> Image {
+        points < 0 ?
+            .richTextFontSizeDecrease :
+            .richTextFontSizeIncrease
+    }
+
+    static func richTextStepIndent(
+        _ points: Double
+    ) -> Image {
+        points < 0 ?
+            .richTextIndentDecrease :
+            .richTextIndentIncrease
+    }
+
+    static func richTextStepLineSpacing(
+        _ points: Double
+    ) -> Image {
+        points < 0 ?
+            .richTextLineSpacingDecrease :
+            .richTextLineSpacingIncrease
+    }
+
+    static func richTextStepSuperscript(
+        _ steps: Int
+    ) -> Image {
+        steps < 0 ?
+            .richTextSuperscriptDecrease :
+            .richTextSuperscriptIncrease
+    }
+}
+
+extension Image {
 
     static func symbol(_ name: String) -> Image {
-        Image(systemName: name)
-    }
-}
-
-
-struct Image_RichText_Previews: PreviewProvider {
-
-    static var previews: some View {
-        VStack(spacing: 20) {
-            alignmentPreviews
-            Divider()
-            stylePreviews
-            Divider()
-            actionPreviews
-        }
-    }
-
-    static var alignmentPreviews: some View {
-        HStack {
-            Image.richTextAlignmentCenter
-            Image.richTextAlignmentJustified
-            Image.richTextAlignmentLeft
-            Image.richTextAlignmentRight
-        }
-    }
-
-    static var stylePreviews: some View {
-        HStack {
-            Image.richTextStyleBold
-            Image.richTextStyleItalic
-            Image.richTextStyleUnderline
-        }
-    }
-
-    static var actionPreviews: some View {
-        HStack {
-            Image.richTextActionCopy
-            Image.richTextActionEdit
-            Image.richTextActionRedo
-            Image.richTextActionUndo
-        }
+        .init(systemName: name)
     }
 }

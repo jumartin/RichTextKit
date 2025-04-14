@@ -1,97 +1,137 @@
 //
-//  RichTextDataFormat.swift
+//  RichTextData+Format.swift
 //  RichTextKit
 //
 //  Created by Daniel Saidi on 2022-06-02.
-//  Copyright © 2022 Daniel Saidi. All rights reserved.
+//  Copyright © 2022-2024 Daniel Saidi. All rights reserved.
 //
 
 import Foundation
 import UniformTypeIdentifiers
 
-/**
- This enum specifies various rich text formats that are used
- in different ways by the library.
+/// This enum specifies rich text data formats.
+///
+/// For instance, ``rtf`` supports styles, colors etc. while
+/// ``plainText`` only handles text. ``archivedData`` can be
+/// used to archive texts, images and various attachments in
+/// binary archives. This is convenient when targeting Apple
+/// platforms, but restricts how data can be used elsewhere.
+///
+/// ``archivedData`` uses an `rtk` file extension as well as
+/// a `UTType.archivedData` uniform type. You can define any
+/// custom ``vendorArchivedData(id:fileExtension:fileFormatText:uniformType:)``
+/// value to specify a custom data format.
+///
+/// Remember to configure your app to handle the UTTypes you
+/// want to support, as well as the file extensions you want
+/// to open with it. Check out the demo app for examples.
+public enum RichTextDataFormat: Equatable, Identifiable {
 
- This is a convenience type that's used by many of the types
- in the library. You are not forced to use it, but it can be
- useful when you want to save and files, generate share data
- etc. using the functionality that the library provides.
-
- The reason for having the ``archivedData`` is to provide an
- additional way to handle images. .txt files doesn't support
- images at all and .rtf requires special handling, where the
- RTFD format handles file attachments like images by storing
- them in a sub folder, using a special format.
-
- The ``archivedData`` format will instead keep the rich text
- attachments within the rich text and use the Apple specific
- `NSKeyedArchiver` and `NSKeyedUnarchiver` types to create a
- certain kind of rich text data, that can only be handled by
- these archiver classes. It's convenient, but more limited.
- */
-public enum RichTextDataFormat: String, CaseIterable, Equatable, Identifiable {
-    
     /// Archived data that's persisted with a keyed archiver.
     case archivedData
-    
+
     /// Plain data is persisted as plain text.
     case plainText
-    
+
     /// RTF data is persisted as formatted text.
     case rtf
+
+    /// A vendor-specific archived data format.
+    case vendorArchivedData(
+        id: String,
+        fileExtension: String,
+        fileFormatText: String,
+        uniformType: UTType
+    )
+}
+
+public extension Collection where Element == RichTextDataFormat {
+
+    /// Get all library supported data formats.
+    static var libraryFormats: [Element] {
+        Element.libraryFormats
+    }
 }
 
 public extension RichTextDataFormat {
-    
-    /**
-     The format's unique identifier.
-     */
-    var id: String { rawValue }
-    
-    /**
-     The formats that a format can be converted to.
-     */
-    var convertableFormats: [RichTextDataFormat] {
+
+    /// Get all library supported data formats.
+    static var libraryFormats: [Self] {
+        [.archivedData, .plainText, .rtf]
+    }
+
+    /// The format's unique identifier.
+    var id: String {
         switch self {
-        case .archivedData: return [.rtf, .plainText]
-        case .plainText: return [.archivedData, .rtf]
-        case .rtf: return [.archivedData, .plainText]
+        case .archivedData: "archivedData"
+        case .plainText: "plainText"
+        case .rtf: "rtf"
+        case .vendorArchivedData(let id, _, _, _): id
         }
     }
-    
-    /**
-     The format's standard file extension.
-     */
+
+    /// The formats that a format can be converted to.
+    var convertibleFormats: [Self] {
+        switch self {
+        case .vendorArchivedData: Self.libraryFormats.removing(.archivedData)
+        default: Self.libraryFormats.removing(self)
+        }
+    }
+
+    /// The format's file format display text.
+    var fileFormatText: String {
+        switch self {
+        case .archivedData: RTKL10n.fileFormatRtk.text
+        case .plainText: RTKL10n.fileFormatTxt.text
+        case .rtf: RTKL10n.fileFormatRtf.text
+        case .vendorArchivedData(_, _, let text, _): text
+        }
+    }
+
+    /// Whether or not the format is an archived data type.
+    var isArchivedDataFormat: Bool {
+        switch self {
+        case .archivedData: true
+        case .plainText: false
+        case .rtf: false
+        case .vendorArchivedData: true
+        }
+    }
+
+    /// The format's standard file extension.
     var standardFileExtension: String {
         switch self {
-        case .archivedData: return "rtk"
-        case .plainText: return "txt"
-        case .rtf: return "rtf"
+        case .archivedData: "rtk"
+        case .plainText: "txt"
+        case .rtf: "rtf"
+        case .vendorArchivedData(_, let ext, _, _): ext
         }
     }
-    
-    /**
-     Whether or not the format supports images.
 
-     For now, 
-     */
+    /// Whether or not the format supports images.
     var supportsImages: Bool {
         switch self {
-        case .archivedData: return true
-        case .plainText: return false
-        case .rtf: return false
+        case .archivedData: true
+        case .plainText: false
+        case .rtf: false
+        case .vendorArchivedData: true
         }
     }
-    
-    /**
-     The format's uniform type.
-     */
+
+    /// The format's uniform type.
     var uniformType: UTType {
         switch self {
-        case .archivedData: return .archivedData
-        case .plainText: return .plainText
-        case .rtf: return .rtf
+        case .archivedData: .archivedData
+        case .plainText: .plainText
+        case .rtf: .rtf
+        case .vendorArchivedData(_, _, _, let type): type
         }
+    }
+}
+
+private extension Collection where Element == RichTextDataFormat {
+
+    func removing(_ format: Element) -> [Element] {
+        filter { $0 != format }
     }
 }

@@ -3,14 +3,12 @@
 //  RichTextKit
 //
 //  Created by Daniel Saidi on 2022-06-02.
-//  Copyright © 2022 Daniel Saidi. All rights reserved.
+//  Copyright © 2022-2023 Daniel Saidi. All rights reserved.
 //
 
 import CoreGraphics
 
-/**
- This struct defines page configurations for a PDF document.
- */
+/// This error can be thrown when creating PDF data.
 public struct PdfPageConfiguration: Equatable {
 
     /**
@@ -26,40 +24,28 @@ public struct PdfPageConfiguration: Equatable {
         self.pageSize = pageSize
         self.pageMargins = pageMargins
     }
-    
-    /**
-     The page size in points.
-     */
+
+    /// The page size in points.
     public var pageSize: CGSize
 
-    /**
-     The page margins, by default `72`.
-     */
+    /// The page margins.
     public var pageMargins: PdfPageMargins
 }
 
 public extension PdfPageConfiguration {
 
-    /**
-     The standard PDF page configuration.
-
-     You can override this value to change the global config.
-     */
-    static var standard = PdfPageConfiguration()
+    /// The standard PDF page configuration.
+    static var standard: Self { .init() }
 }
 
 public extension PdfPageConfiguration {
 
-    /**
-     Get the paper rectangle.
-     */
+    /// Get the paper rectangle.
     var paperRect: CGRect {
         CGRect(x: 0, y: 0, width: pageSize.width, height: pageSize.height)
     }
 
-    /**
-     Get the printable rectangle.
-     */
+    /// Get the printable rectangle.
     var printableRect: CGRect {
         CGRect(
             x: pageMargins.left,
